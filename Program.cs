@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 /*
-Obviously, this is far from ideal code structure. :)
+Obviously, this is not ideal code structure. :)
 */
 
 namespace StructuresAndAlgosTraining
@@ -15,33 +15,800 @@ namespace StructuresAndAlgosTraining
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine(Substitute.GetValue("asdfghjkli", "weorauadsdaf"));
-
-            //CapitalEncodeFromBinary.Encode("encodeCapital.txt");
-
-            //Halloween.CandyCount("halloween.txt");
-
-            //Pirates.SpotGame("pirates.txt");
-
-            //Primes.FindAllBelow("primes.txt");
-
-            //FizzBuzz.Game("fizzbuzz.txt");
-
-            //SentenceWords.Reverse("reverseSentence.txt");
-
-            //Antivirus.Worked("virus.txt");
-
-            //Cards.War("cards.txt");
-
-            //NumberSequences.Detect("numSeqs.txt");
-
-            //MthFromLast.FindElement("strings.txt");
-
-            //PalindromeFromAddition.Create("palindrome.txt");
-
-            Quicksort.FindPivots("quicksort.txt");
+            //MersennePrimes.FindAllBelow("primes.txt");
+            //lcs("lcs.txt");
+            reverseGroups("reverseGroups.txt");
 
             Console.ReadLine();
+        }
+
+        private static void newProblem(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    
+                }
+        }
+
+        private static void reverseGroups(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    string[] inputs = line.Split(';');
+                    int[] numList = Array.ConvertAll(inputs[0].Split(','), int.Parse);
+
+                    int groupSize = int.Parse(inputs[1]);
+                    int remainder = numList.Count() % groupSize;
+                    int groupBeginIndex = 0;
+                    int groupEndIndex = groupSize - 1;
+                    int groupCount = 0;
+
+                    while (groupEndIndex < numList.Count() - remainder)
+                    {
+                        if (groupEndIndex > groupBeginIndex)
+                        {
+                            int temp = numList[groupBeginIndex];
+                            numList[groupBeginIndex] = numList[groupEndIndex];
+                            numList[groupEndIndex] = temp;
+
+                            groupBeginIndex++;
+                            groupEndIndex--;
+                        }
+                        else
+                        {
+                            groupCount++;
+                            groupBeginIndex = groupCount * groupSize;
+                            groupEndIndex = groupBeginIndex + groupSize - 1;
+                        }
+                    }
+
+                    Console.Write(numList[0]);
+
+                    for (int i = 1; i < numList.Count(); i++)
+                    {
+                        Console.Write(String.Format(",{0}", numList[i]));
+                    }
+
+                    Console.Write("\n");
+                }
+        }
+
+        private static void reverseElements(int[] elements, int begin, int count)
+        {
+            int end = begin + count - 1;
+            while (begin != end)
+            {
+                int temp = elements[begin];
+                elements[begin] = elements[end];
+                elements[end] = temp;
+
+                begin++;
+                end--;
+            }
+        }
+
+        private static void numberOfOnes(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    string binary = Convert.ToString(int.Parse(line), 2);
+                    int count = 0;
+                    foreach (char c in binary.ToCharArray())
+                    {
+                        if (c == '1')
+                        {
+                            count++;
+                        }
+                    }
+                    Console.WriteLine(count);
+                }
+        }
+
+        private static void removeCharacter(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    string[] inputs = line.Split(new string[] { ", " }, StringSplitOptions.None);
+
+                    string output = "";
+                    foreach (char c in inputs[0].ToCharArray())
+                    {
+                        if (inputs[1].IndexOf(c) < 0)
+                            output += c;
+                    }
+
+                    Console.WriteLine(output);
+                }
+        }
+
+        private static void stringSearching(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    string[] inputs = line.Split(',');
+                    int firstPos = 0;
+                    int secondPos = 0;
+                    while (firstPos < inputs[0].Length && secondPos < inputs[1].Length)
+                    {
+                        if (inputs[1][secondPos] == '*')
+                        {
+                            if (inputs[1].Length - 1 == secondPos || inputs[0][firstPos + 1] == inputs[1][secondPos + 1])
+                            {
+                                firstPos += 2;
+                                secondPos += 2;
+                            }
+                            else
+                            {
+                                firstPos++;
+                            }
+                        }
+                        else if (inputs[1][secondPos] == '\\' && inputs[1][secondPos + 1] == '*' && inputs[0][firstPos] == '*')
+                        {
+                            firstPos++;
+                            secondPos += 2;
+                        }
+                        else
+                        {
+                            if (inputs[0][firstPos] != inputs[1][secondPos])
+                            {
+                                firstPos++;
+                                secondPos = 0;
+                            }
+                            else
+                            {
+                                firstPos++;
+                                secondPos++;
+                            }
+                        }
+                    }
+
+                    if (secondPos >= inputs[1].Length)
+                    {
+                        Console.WriteLine("true");
+                    }
+                    else
+                    {
+                        Console.WriteLine("false");
+                    }
+                }
+        }
+
+        private static void lcs(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    string[] inputs = line.Split(';');
+
+                    //remove all chars from string 0, which do not appear in string 1
+                    for (int i = 0; i < inputs[0].Length; i++)
+                    {
+                        if (inputs[1].IndexOf(inputs[0][i]) < 0)
+                        {
+                            inputs[0] = inputs[0].Remove(i, 1);
+                        }
+                    }
+
+                    //remove all chars from string 1, which do not appear in string 0
+                    for (int i = 0; i < inputs[1].Length; i++)
+                    {
+                        if (inputs[0].IndexOf(inputs[1][i]) < 0)
+                        {
+                            inputs[1] = inputs[1].Remove(i, 1);
+                        }
+                    }
+
+                    /*
+                    for (int i = 0; i < inputs[1].Length - 1; i++)
+                    {
+                        if (inputs[0].IndexOf(inputs[1][i + 1]) < inputs[0].IndexOf(inputs[1][i]))
+                        {
+                            inputs[1] = inputs[1].Remove(i, 1);
+                        }
+                    }
+
+                    Console.WriteLine(inputs[1]);
+                    */
+
+                    //now, I know the strings contain the same chars, but possibly
+                    //out of order (and therefore, not in sequence)
+                    string longest = "";
+                    if (inputs[0].Length > 0 && inputs[1].Length > 0)
+                    {
+                        //if both strings have at least 1 char, then I know any single
+                        //char will be a sequence (of length 1), repeated in both
+                        longest = inputs[0][0].ToString();
+
+                        //foreach char in string 0, use it as the beginning
+                        //of a potential sequence in string 1
+                        for (int i = 0; i < inputs[0].Length - 1; i++)
+                        {
+                            string sequence = inputs[0][i].ToString();
+
+                            //check each subsequent char in string 1 to see if it occurs
+                            //after the corresponding position of char i in string 0,
+                            //thereby increasing the sequence length
+                            int subsequent = inputs[1].IndexOf(inputs[0][i]) + 1;
+                            while (subsequent < inputs[1].Length)
+                            {
+                                if (inputs[0].IndexOf(inputs[1][subsequent]) > i)
+                                {
+                                    sequence += inputs[1][subsequent].ToString();
+                                }
+
+                                subsequent++;
+                            }
+
+                            for (int j = 0; j < sequence.Length - 1; j++)
+                            {
+                                if (inputs[0].IndexOf(sequence[j + 1]) < inputs[0].IndexOf(sequence[j]))
+                                {
+                                    sequence = sequence.Remove(j, 1);
+                                }
+                            }
+
+                            if (sequence.Length > longest.Length)
+                            {
+                                longest = sequence;
+                            }
+                        }
+                    }
+
+                    Console.WriteLine(longest);
+                }
+        }
+
+        private static void happyNumbers(string file)
+        {
+            //https://www.codeeval.com/open_challenges/39/
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+                    
+                    List<int> steps = new List<int>();
+                    bool isHappy = false;
+                    while (!isHappy)
+                    {
+                        int sum = 0;
+                        for (int i = 0; i < line.Length; i++)
+                        {
+                            int digit = int.Parse(line[i].ToString());
+                            sum += digit * digit;
+                        }
+
+                        if (sum == 1)
+                        {
+                            isHappy = true;
+                        }
+                        else if (steps.Contains(sum))
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            steps.Add(sum);
+                            line = sum.ToString();
+                            sum = 0;
+                        }
+                    }
+
+                    if (isHappy)
+                    {
+                        Console.WriteLine("1");
+                    }
+                    else
+                    {
+                        Console.WriteLine("0");
+                    }
+                }
+        }
+
+        private static void rightmostChar(string file)
+        {
+            //https://www.codeeval.com/open_challenges/31/
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    string[] inputs = line.Split(',');
+                    bool found = false;
+                    for (int i = inputs[0].Length - 1; i >= 0; i--)
+                    {
+                        if (inputs[0][i].ToString() == inputs[1])
+                        {
+                            found = true;
+                            Console.WriteLine(i);
+                            break;
+                        }
+                    }
+                    if (!found)
+                    {
+                        Console.WriteLine("-1");
+                    }
+                }
+        }
+
+        private static void setIntersection(string file)
+        {
+            //https://www.codeeval.com/open_challenges/30/
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    string[] inputs = line.Split(';');
+                    int[] left = Array.ConvertAll(inputs[0].Split(','), int.Parse);
+                    int[] right = Array.ConvertAll(inputs[1].Split(','), int.Parse);
+
+                    int length = 0;
+                    int firstElement = 0;
+                    for (int posLeft = 0; posLeft < left.Count(); posLeft++)
+                    {
+                        for (int posRight = 0; posRight < right.Count(); posRight++)
+                        {
+                            if (left[posLeft] == right[posRight])
+                            {
+                                //in an intersection
+                                if (length == 0)
+                                {
+                                    //first element of the intersection
+                                    firstElement = posLeft;
+                                }
+
+                                length++;
+                                if (posLeft < left.Count() - 1)
+                                {
+                                    posLeft++;
+                                }
+                                else
+                                {
+                                    //we've reached the end of input left
+                                    break;
+                                }
+                            }
+                            else if (length > 0)
+                            {
+                                //intersection has ended
+                                break;
+                            }
+                        }
+
+                        if (length > 0)
+                        {
+                            break;
+                        }
+                    }
+
+                    StringBuilder output = new StringBuilder("");
+                    for (int i = 0; i < length; i++)
+                    {
+                        output.Append(left[firstElement + i]);
+                        if (i < length - 1)
+                        {
+                            output.Append(",");
+                        }
+                    }
+
+                    Console.WriteLine(output);
+                }
+        }
+
+        private static void uniqueElements(string file)
+        {
+            //https://www.codeeval.com/open_challenges/29/
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    int[] inputs = Array.ConvertAll(line.Split(','), int.Parse);
+
+                    Dictionary<int, bool> uniques = new Dictionary<int, bool>();
+                    foreach (int value in inputs)
+                    {
+                        try
+                        {
+                            uniques.Add(value, true);
+                        }
+                        catch (ArgumentException) { }
+                    }
+
+                    int[] keys = uniques.Keys.ToArray();
+                    int last = 1;
+                    foreach (int key in keys)
+                    {
+                        Console.Write(key);
+                        if (last < keys.Count())
+                        {
+                            Console.Write(',');
+                        }
+                        last++;
+                    }
+                    Console.Write('\n');
+                }
+        }
+
+        private static void oddNumbers(string file)
+        {
+            //https://www.codeeval.com/open_challenges/25/
+            for (int i = 1; i <= 99; i++)
+            {
+                if (i % 2 == 1)
+                {
+                    Console.WriteLine(i);
+                }
+            }
+        }
+
+        private static void sumOfIntsFromFile(string file)
+        {
+            //https://www.codeeval.com/open_challenges/24/
+            int sum = 0;
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    sum += int.Parse(line);
+                }
+            Console.WriteLine(sum);
+        }
+
+        private static void multiplicationTables()
+        {
+            //https://www.codeeval.com/open_challenges/23/
+            for (int vertical = 1; vertical <= 12; vertical++)
+            {
+                for (int horizontal = 1; horizontal <= 12; horizontal++)
+                {
+                    Console.Write(String.Format("{0,4}", vertical * horizontal));
+                }
+                Console.Write('\n');
+            }
+        }
+
+        private static void fibonacciSeries(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    Console.WriteLine(fib(int.Parse(line)));
+                }
+        }
+
+        private static int fib(int index)
+        {
+            if (index < 2)
+            {
+                return index;
+            }
+
+            return fib(index - 1) + fib(index - 2);
+        }
+
+        private static void bitPositions(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    int[] inputs = Array.ConvertAll(line.Split(','), int.Parse);
+                    string binary = Convert.ToString(inputs[0], 2);
+                    if (binary[binary.Length - inputs[1]] == binary[binary.Length - inputs[2]])
+                    {
+                        Console.WriteLine("true");
+                    }
+                    else {
+                        Console.WriteLine("false");
+                    }
+                }
+        }
+
+        private static void multipleOfANumber(string file)
+        {
+            //https://www.codeeval.com/open_challenges/18/
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    int[] inputs = Array.ConvertAll(line.Split(','), int.Parse);
+                    int initial = inputs[1];
+                    while (inputs[1] < inputs[0])
+                    {
+                        inputs[1] += initial;
+                    }
+                    Console.WriteLine(inputs[1]);
+                }
+        }
+
+        private static void missingForPanagram(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    line = line.ToLower();
+                    line = line.Replace(" ", String.Empty);
+                    List<char> alphabet = new List<char>() { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+                    for (int i = 0; i < line.Length; i++)
+                    {
+                        if (alphabet.Contains(line[i]))
+                        {
+                            alphabet.Remove(line[i]);
+                        }
+                    }
+
+                    if (alphabet.Count == 0)
+                    {
+                        Console.WriteLine("NULL");
+                    }
+                    else {
+                        foreach (char letter in alphabet)
+                        {
+                            Console.Write(letter);
+                        }
+                        Console.Write('\n');
+                    }
+                }
+        }
+
+        private static void trailingString(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    string[] inputs = line.Split(',');
+                    if (inputs[1].Length <= inputs[0].Length && inputs[0].Substring(inputs[0].Length - inputs[1].Length) == inputs[1])
+                    {
+                        Console.WriteLine("1");
+                    }
+                    else {
+                        Console.WriteLine("0");
+                    }
+                }
+        }
+
+        private static void firstNonRepeated(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    /*
+                    for (int i = 0; i < line.Length; i++) {
+                        bool isNotRepeated = true;
+                        for (int j = 1; j < line.Length; j++) {
+                            if (line.ElementAt<char>(j) == line.ElementAt<char>(i)) {
+                                isNotRepeated = false;
+                                break;
+                            }
+                        }
+
+                        if (isNotRepeated) {
+                            Console.WriteLine(line.ElementAt<char>(i));
+                            break;
+                        }
+                    }
+                    */
+
+                    Dictionary<char, int> instances = new Dictionary<char, int>();
+                    for (int i = 0; i < line.Length; i++)
+                    {
+                        if (!instances.ContainsKey(line[i]))
+                        {
+                            instances.Add(line[i], 1);
+                        }
+                        else {
+                            instances[line[i]]++;
+                        }
+                    }
+
+                    for (int i = 0; i < line.Length; i++)
+                    {
+                        if (instances[line[i]] == 1)
+                        {
+                            Console.WriteLine(line[i]);
+                            break;
+                        }
+                    }
+                }
+        }
+
+        private static void longestTwoLines(string file)
+        {
+            StreamReader reader = File.OpenText(file);
+            int inputNum = int.Parse(reader.ReadLine());
+            Dictionary<int, string> lines = new Dictionary<int, string>();
+            while (!reader.EndOfStream)
+            {
+                string line = reader.ReadLine();
+                if (null == line)
+                    continue;
+
+                lines.Add(line.Length, line);
+            }
+
+            int[] lengths = lines.Keys.ToArray();
+            Array.Sort(lengths);
+
+            for (int i = 1; i <= inputNum; i++)
+            {
+                Console.WriteLine(lines[lengths[lengths.Count() - i]]);
+            }
+        }
+
+        private static void isArmstrong(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    int input = int.Parse(line);
+                    int sum = 0;
+                    for (int i = 0; i < line.Length; i++)
+                    {
+                        int digitToPower = (int)Math.Pow(int.Parse(line[i].ToString()), line.Length);
+                        sum += digitToPower;
+                    }
+
+                    if (input == sum)
+                    {
+                        Console.WriteLine("True");
+                    }
+                    else {
+                        Console.WriteLine("False");
+                    }
+                }
+        }
+
+        private static void sumOfDigits(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    int sum = 0;
+                    for (int i = 0; i < line.Length; i++)
+                    {
+                        sum += int.Parse(line.Substring(i, 1));
+                    }
+
+                    Console.WriteLine(sum);
+                }
+        }
+
+        private static void lowercase(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    Console.WriteLine(line.ToLower());
+                }
+        }
+
+        private static void footballFans(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    string[] countryInputs = line.Split(new string[] { " | " }, StringSplitOptions.None);
+                    Dictionary<int, List<int>> supportingCountriesByClubNum = new Dictionary<int, List<int>>();
+                    int countryNum = 1;
+                    foreach (string country in countryInputs)
+                    {
+                        int[] supported = Array.ConvertAll(country.Split(' '), int.Parse);
+                        foreach (int club in supported)
+                        {
+                            if (!supportingCountriesByClubNum.ContainsKey(club))
+                            {
+                                supportingCountriesByClubNum.Add(club, new List<int>() { countryNum });
+                            }
+                            else {
+                                supportingCountriesByClubNum[club].Add(countryNum);
+                            }
+                        }
+                        countryNum++;
+                    }
+
+                    int[] clubNums = supportingCountriesByClubNum.Keys.ToArray();
+                    Array.Sort(clubNums);
+                    foreach (int clubNum in clubNums)
+                    {
+                        Console.Write(clubNum + ":");
+                        int last = 0;
+                        supportingCountriesByClubNum[clubNum].Sort();
+                        foreach (int supportingCountry in supportingCountriesByClubNum[clubNum])
+                        {
+                            Console.Write(supportingCountry);
+                            last++;
+
+                            if (last < supportingCountriesByClubNum[clubNum].Count())
+                            {
+                                Console.Write(",");
+                            }
+                            else {
+                                Console.Write("; ");
+                            }
+                        }
+                    }
+
+                    Console.WriteLine();
+                }
         }
     }
 
@@ -441,12 +1208,120 @@ namespace StructuresAndAlgosTraining
         }
     }
 
-    class Primes
+    /*
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        //keep track of all mersenne primes globally, so we only have to 
+        //calc new ones when our input number grows because our
+        //max discovered mersenne prime
+        List<int> mersennePrimes = new List<int>();
+        //we know 3 will be in all
+        mersennePrimes.Add(3);
+            
+        using (StreamReader reader = File.OpenText(args[0]))
+        while (!reader.EndOfStream)
+        {
+            string line = reader.ReadLine();
+            if (null == line)
+                continue;
+            
+            int inputNum = int.Parse(line);
+            StringBuilder allBelow = new StringBuilder("3");
+
+            int lastPrimeAdded = 3;
+
+            //go through our globally-recorded list of mersenne primes,
+            //adding all which are below the input num
+            if (mersennePrimes.Count() > 1)
+            {
+                int i = 1;
+                while (i < mersennePrimes.Count() && inputNum > mersennePrimes[i])
+                {
+                    allBelow.Append(string.Format(", {0}", mersennePrimes[i]));
+                    lastPrimeAdded = mersennePrimes[i];
+                    i++;
+                }
+                
+                if(i < mersennePrimes.Count())
+                {
+                    //we still have more mersenne primes saved globally, but they
+                    //are >= our read-in number, so we're done
+                    Console.WriteLine(allBelow);
+                    continue;
+                }
+            }
+
+            //if we haven't continued yet, then our input num is greater
+            //than our maximum, globally-recorded mersenne prime, so we'll need to
+            //calculate more
+            for (int i = ++lastPrimeAdded; i < inputNum; i++)
+            {
+                if (isMersennePrime(i))
+                {
+                    allBelow.Append(string.Format(", {0}", i));
+                    mersennePrimes.Add(i);
+                }
+            }
+
+            Console.WriteLine(allBelow);
+        }
+    }
+    
+    private static bool isMersennePrime(int num)
+    {
+        //a candidate must first, be a prime number
+        if (isPrime(num)) {
+            //and there must be some int n, where 2^n - 1 == candidate
+            for (int powerOfTwo = 2; Math.Pow(2, powerOfTwo) -1 <= num; powerOfTwo++)
+            {
+                if (Math.Pow(2, powerOfTwo) - 1 == num)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static bool isPrime(int num)
+    {
+        if (num % 2 == 0 || num % Math.Sqrt(num) == 0)
+        {
+            return false;
+        }
+
+        for (int i = 3; i < Math.Ceiling(Math.Sqrt(num)); i += 2)
+        {
+            if (num % i == 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+    */
+
+    class MersennePrimes
     {
         public static void FindAllBelow(string file)
         {
-            List<int> primes = new List<int>();
-            primes.Add(3);
+            //keep track of all mersenne primes globally, so we only have to 
+            //calc new ones when our input number grows because our
+            //max discovered mersenne prime
+            List<int> mersennePrimes = new List<int>();
+            //we know 3 will be in all
+            mersennePrimes.Add(3);
 
             StreamReader reader = File.OpenText(file);
             while (!reader.EndOfStream)
@@ -457,35 +1332,41 @@ namespace StructuresAndAlgosTraining
                     continue;
                 }
 
-                int readNum = int.Parse(line);
+                int inputNum = int.Parse(line);
                 StringBuilder allBelow = new StringBuilder("3");
 
-                int lastPrimeAdded = 5;
+                int lastPrimeAdded = 3;
 
-                if (primes.Count() > 1)
+                //go through our globally-recorded list of mersenne primes,
+                //adding all which are below the input num
+                if (mersennePrimes.Count() > 1)
                 {
                     int i = 1;
-                    while (i < primes.Count() && readNum > primes[i])
+                    while (i < mersennePrimes.Count() && inputNum > mersennePrimes[i])
                     {
-                        allBelow.Append(string.Format(", {0}", primes[i]));
-                        lastPrimeAdded = primes[i];
+                        allBelow.Append(string.Format(", {0}", mersennePrimes[i]));
+                        lastPrimeAdded = mersennePrimes[i];
                         i++;
                     }
                     
-                    if(i < primes.Count())
+                    if(i < mersennePrimes.Count())
                     {
-                        //we still have record of more primes, but they are >= our read-in number, so we're done
+                        //we still have more mersenne primes saved globally, but they
+                        //are >= our read-in number, so we're done
                         Console.WriteLine(allBelow);
                         continue;
                     }
                 }
 
-                for (int i = lastPrimeAdded; i < readNum; i++)
+                //if we haven't continued yet, then our input num is greater
+                //than our maximum, globally-recorded mersenne prime, so we'll need to
+                //calculate more
+                for (int i = ++lastPrimeAdded; i < inputNum; i++)
                 {
-                    if (isPrime(i))
+                    if (isMersennePrime(i))
                     {
                         allBelow.Append(string.Format(", {0}", i));
-                        primes.Add(i);
+                        mersennePrimes.Add(i);
                     }
                 }
 
@@ -493,21 +1374,39 @@ namespace StructuresAndAlgosTraining
             }
         }
 
-        private static bool isPrime(int num)
+        private static bool isMersennePrime(int num)
         {
-            bool primeBool = true;
-
-            int factor = num / 2;
-
-            for (int i = 2; i < factor; i++)
-            {
-                if((num % i) == 0)
+            //a candidate must first, be a prime number
+            if (isPrime(num)) {
+                //and there must be some int n, where 2^n - 1 == candidate
+                for (int powerOfTwo = 2; Math.Pow(2, powerOfTwo) -1 <= num; powerOfTwo++)
                 {
-                    primeBool = false;
+                    if (Math.Pow(2, powerOfTwo) - 1 == num)
+                    {
+                        return true;
+                    }
                 }
             }
 
-            return primeBool;
+            return false;
+        }
+
+        private static bool isPrime(int num)
+        {
+            if (num % 2 == 0 || num % Math.Sqrt(num) == 0)
+            {
+                return false;
+            }
+
+            for (int i = 3; i < Math.Ceiling(Math.Sqrt(num)); i += 2)
+            {
+                if (num % i == 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 
