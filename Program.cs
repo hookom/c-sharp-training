@@ -17,7 +17,6 @@ namespace StructuresAndAlgosTraining
         {
             //MersennePrimes.FindAllBelow("primes.txt");
             //lcs("lcs.txt");
-            reverseGroups("reverseGroups.txt");
 
             Console.ReadLine();
         }
@@ -81,20 +80,6 @@ namespace StructuresAndAlgosTraining
 
                     Console.Write("\n");
                 }
-        }
-
-        private static void reverseElements(int[] elements, int begin, int count)
-        {
-            int end = begin + count - 1;
-            while (begin != end)
-            {
-                int temp = elements[begin];
-                elements[begin] = elements[end];
-                elements[end] = temp;
-
-                begin++;
-                end--;
-            }
         }
 
         private static void numberOfOnes(string file)
