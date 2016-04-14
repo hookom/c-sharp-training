@@ -21,19 +21,6 @@ namespace StructuresAndAlgosTraining
             Console.ReadLine();
         }
 
-        private static void newProblem(string file)
-        {
-            using (StreamReader reader = File.OpenText(file))
-                while (!reader.EndOfStream)
-                {
-                    string line = reader.ReadLine();
-                    if (null == line)
-                        continue;
-
-                    
-                }
-        }
-
         private static void reverseGroups(string file)
         {
             using (StreamReader reader = File.OpenText(file))
