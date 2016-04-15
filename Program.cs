@@ -17,8 +17,169 @@ namespace StructuresAndAlgosTraining
         {
             //MersennePrimes.FindAllBelow("primes.txt");
             //lcs("lcs.txt");
+            //followingInteger("followingInteger.txt");
+
 
             Console.ReadLine();
+        }
+
+        private static void newProblem(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    
+                }
+        }
+
+        private static void followingInteger(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    List<int> input = new List<int>();
+                    for (int i = 0; i < line.Length; i++) {
+                        input.Add(int.Parse(line[i].ToString()));
+                    }
+
+                    bool isLargest = true;
+                    for (int i = input.Count() - 1; i > 0; i--)
+                    {
+                        if (input[i] == '0' && i == 1)
+                        {
+                            //int can't start with 0
+                            break;
+                        }
+
+                        int offset = 1;
+                        while (offset <= i && isLargest)
+                        {
+                            if (input[i] > input[i - offset])
+                            {
+                                //swap
+                                int temp = input[i];
+                                input[i] = input[i - offset];
+                                input[i - offset] = temp;
+
+                                isLargest = false;
+
+                                //if there are more than 1 values to the right of the pivot
+                                if (i - offset < input.Count() - 2)
+                                {
+                                    //reorder values beyond the swap point
+                                    int posToReorder = i - offset + 1;
+                                    int numToReorder = input.Count() - posToReorder;
+                                    List <int> endValues = input.GetRange(posToReorder, numToReorder);
+                                    input.RemoveRange(posToReorder, numToReorder);
+
+                                    endValues.Sort();
+                                    foreach (int sorted in endValues)
+                                    {
+                                        input.Add(sorted);
+                                    }
+                                }
+                            }
+
+                            offset++;
+                        }
+                    }
+
+                    if (isLargest)
+                    {
+                        //reorder all values
+                        input.Sort();
+
+                        //deal with leading zeroes
+                        if (input[0] == 0)
+                        {
+                            for (int i = 0; input[i] == 0; i++)
+                            {
+                                if (input[i + 1] != 0)
+                                {
+                                    //swap first non-zero int (which will be the
+                                    //lowest, because of sort()) to the beginning
+                                    input[0] = input[i + 1];
+                                    input[i + 1] = 0;
+                                    break;
+                                }
+                            }
+                        }
+
+                        //insert 0 at position 1
+                        input.Insert(1, 0);
+                    }
+
+                    foreach (int i in input)
+                    {
+                        Console.Write(i);
+                    }
+                    Console.Write("\n");
+                }
+        }
+
+        private static void nModM(string file)
+        {
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+
+                    int[] inputs = Array.ConvertAll(line.Split(','), int.Parse);
+                    int quotient = inputs[0] / inputs[1];
+                    Console.WriteLine(inputs[0] - quotient * inputs[1]);
+                }
+        }
+
+        private static void columnNames(string file)
+        {
+            List<string> alphabet = new List<string>() { "Z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y" };
+
+            using (StreamReader reader = File.OpenText(file))
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (null == line)
+                        continue;
+                    
+                    int input = int.Parse(line);
+                    string columnName = "";
+                    while (input > 26)
+                    {
+                        columnName = alphabet[input % 26] + columnName;
+
+                        if (input % 26 == 0)
+                        {
+                            input--;
+                        }
+
+                        input /= 26;
+                    }
+
+                    columnName = alphabet[input % 26] + columnName;
+                    Console.WriteLine(columnName);
+                }
+        }
+
+        private static void primePalindrome(string file)
+        {
+            for (int i = 999; i > 0; i--)
+            {
+                if (PalindromeFromAddition.isPalindrome(i.ToString()) && MersennePrimes.isPrime(i))
+                {
+                    Console.WriteLine(i);
+                    break;
+                }
+            }
         }
 
         private static void reverseGroups(string file)
@@ -887,7 +1048,7 @@ namespace StructuresAndAlgosTraining
             }
         }
 
-        private static bool isPalindrome(string testme)
+        public static bool isPalindrome(string testme)
         {
             int begin = 0;
             int end = testme.Length - 1;
@@ -1363,7 +1524,7 @@ class Program
             return false;
         }
 
-        private static bool isPrime(int num)
+        public static bool isPrime(int num)
         {
             if (num % 2 == 0 || num % Math.Sqrt(num) == 0)
             {
