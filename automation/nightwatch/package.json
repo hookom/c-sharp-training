@@ -1,0 +1,38 @@
+{
+  "name": "climb-e2e-test",
+  "version": "1.0.0",
+  "description": "E2E tests for Climb on the Way using Nightwatch.js (and Sauce Labs?)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hookom/climb-e2e-test.git"
+  },
+  "scripts": {
+    "postinstall": "gulp selenium:install",
+    "start": "gulp selenium:start",
+    "test": "gulp test"
+  },
+  "keywords": [
+    "functional",
+    "acceptance",
+    "e2e",
+    "end-to-end",
+    "test",
+    "testing"
+  ],
+  "author": "Isaac Hookom <isaac.hookom@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hookom/climb-e2e-test/issues"
+  },
+  "homepage": "https://github.com/hookom/climb-e2e-test",
+  "devDependencies": {
+    "fkill": "^4.0.0",
+    "gulp": "^3.9.1",
+    "nightwatch": "^0.9.0",
+    "ps-list": "^3.1.0",
+    "selenium-standalone": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=4"
+  }
+}

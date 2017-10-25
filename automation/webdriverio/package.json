@@ -1,0 +1,30 @@
+{
+  "name": "climb-e2e-webdriverio",
+  "version": "1.0.0",
+  "description": "E2E testing of climbontheway using WebdriverIO",
+  "main": "index.js",
+  "scripts": {
+    "test": "wdio wdio.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hookom/climb-e2e-webdriverio.git"
+  },
+  "keywords": [
+    "webdriverio"
+  ],
+  "author": "Isaac Hookom <isaac.hookom@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hookom/climb-e2e-webdriverio/issues"
+  },
+  "homepage": "https://github.com/hookom/climb-e2e-webdriverio#readme",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "wdio-mocha-framework": "^0.5.10",
+    "wdio-selenium-standalone-service": "0.0.8",
+    "webdriverio": "^4.7.1",
+    "wdio-dot-reporter": "0.0.8",
+    "wdio-spec-reporter": "^0.1.0"
+  }
+}

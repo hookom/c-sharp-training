@@ -1,0 +1,23 @@
+{
+  "name": "climb-e2e-mocha",
+  "version": "1.0.0",
+  "description": "E2E tests of climbontheway in the mocha framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/*.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "(https://github.com/hookom/climb-e2e-mocha.git)"
+  },
+  "keywords": [
+    "mocha"
+  ],
+  "author": "Isaac Hookom <isaac.hookom@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "selenium-webdriver": "^3.4.0"
+  }
+}
